@@ -1,0 +1,91 @@
+terraform {
+  required_version = ">= 1.6.0"
+
+  backend "s3" {
+    bucket         = ""
+    key            = "infrastructure/terraform.tfstate"
+    region         = "eu-west-2"
+    dynamodb_table = "terraform-state-lock"
+    encrypt        = true
+  }
+}
+
+module "vpc" {
+  source = "./modules/vpc"
+  azs                  = var.azs
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+
+}
+
+module "sg" {
+  source = "./modules/sg"
+  vpc_id = module.vpc.vpc_id
+  vpc_cidr = var.vpc_cidr
+  project_name = var.project_name
+  environment = var.Environment_name
+}
+
+module "iam" {
+  source = "./modules/iam"
+  project_name = var.project_name
+  github_repo = var.github_repo
+  policy_arn = var.policy_arn
+
+}
+
+module "acm" {
+  source = "./modules/acm"
+  domain_name = var.domain_name
+  project_name = var.project_name
+  zone_id = module.route53.route53_hosted_zone
+  validation_method = var.validation_method
+  ttl = var.ttl 
+}
+
+module "alb" {
+  source = "./modules/alb"
+  project_name = var.project_name
+  vpc_id = module.vpc.vpc_id
+  public_subnet_ids = module.vpc.public_subnet_ids
+  alb_sg_id = module.sg.alb_sg_id
+  certificate_arn = module.acm.cert.arn
+  health_check_path = var.health_check_path
+  target_port = var.target_port
+  certificate_validation_ref = var.certificate_validation_ref
+}
+
+module "route53" {
+  source = "./modules/route53"
+  domain_name = var.domain_name
+  subdomain = var.subdomain
+  hosted_zone_id = var.hosted_zone_id
+  alb_dns_name = module.alb.alb_dns_name
+  alb_zone_id = module.alb.alb_zone_id
+}
+
+module "ecs" {
+  source = "./modules/ecs"
+  project_name = var.project_name
+  vpc_id = module.vpc.vpc_id
+  enviroment = var.Environment_name
+  alb_sg_ids = module.alb.alb_sg_id
+  aws_region = var.aws_region
+  log_retention_days = var.log_retention_days
+  container_memory = var.container_memory
+  policy_arn = var.policy_arn
+  desired_count = var.desired_count
+container_cpu = var.container_cpu
+container_port = var.container_port
+execution_arn = var.execution.arn
+target_group_arn = var.target_group_arn
+subnet_ids = var.subnet_ids 
+task_arn = var.task_arn
+ecr_repo_url = var.ecr_repo_url
+
+}
+
+module "ecr" {
+  source = "./modules/ecr"
+  project_name = var.project_name
+}
