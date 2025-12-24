@@ -7,8 +7,8 @@ env:
   AWS_Region: eu-west-2
   ECR_Repository: Frontend
   Image_Tag: latest 
-  ECS_CLUSTER: ecs_cluster
-  ECS_SERVICE: Frontend-service
+  ECS_CLUSTER: ecs
+  ECS_SERVICE: app
 
 jobs:
   build-and-deploy: 
