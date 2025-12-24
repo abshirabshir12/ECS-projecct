@@ -23,8 +23,7 @@ jobs:
         - name: configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v3
           with:
-            aws-access-key-id:
-            aws-secret-access-key:
+            role-to-assume: arn:aws:iam::555569221122:role/ECS-projecct-github-actions-role
             aws-region: ${{ env.AWS_Region }}
 
         - name: Terraform init 
