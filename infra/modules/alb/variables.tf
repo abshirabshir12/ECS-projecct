@@ -13,19 +13,8 @@ variable "public_subnet_ids" {
 variable "certificate_arn" {
   type = string
 }
-
 variable "alb_sg_id" {
-  type = string
+  description = "Security group ID for the ALB"
+  type        = string
 }
 
-variable "health_check_path" {
-  type = string
-}
-
-variable "target_port" {
-  type = number
-}
-
-variable "certificate_validation_ref" {
-  type = any
-}

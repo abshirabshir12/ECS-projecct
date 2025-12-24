@@ -100,7 +100,7 @@ resource "aws_iam_role" "github_actions" {
       {
         Effect = "Allow"
         Principal = {
-          Federated = aws_iam_openid_connect_provider.github.arn
+          Federated = "arn:aws:iam::555569221122:oidc-provider/token.actions.githubusercontent.com"
         }
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
@@ -108,7 +108,7 @@ resource "aws_iam_role" "github_actions" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:*"
+            "token.actions.githubusercontent.com:sub" = "repo:abshirabshir12/${var.github_repo}:*"
           }
         }
       }
@@ -162,6 +162,8 @@ resource "aws_iam_role_policy" "github_actions" {
           "route53:ChangeResourceRecordSets",
           "route53:GetChange",
           "route53:GetHostedZone",
+          "route53:ListHostedZones",
+          "route53:ListHostedZonesByName",
           "route53:ListResourceRecordSets",
           "elasticloadbalancing:*",
           "s3:GetObject",

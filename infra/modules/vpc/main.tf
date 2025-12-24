@@ -1,5 +1,5 @@
 resource "aws_vpc" "main" {
-  cidr_block       = var.vpc.cidr
+  cidr_block       = var.vpc_cidr
   instance_tenancy = "default"
 
   tags = merge(var.tags, {
@@ -7,7 +7,7 @@ resource "aws_vpc" "main" {
   })
 }
 
-resource "aws_internet_gateway" "gw" {
+resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
 tags = merge(var.tags, {
@@ -43,6 +43,7 @@ resource "aws_subnet" "private" {
 resource "aws_eip" "nat" {
   domain   = "vpc"
   depends_on = [ aws_internet_gateway.main ]
+  count = length(var.azs)
 
   tags = merge(var.tags, {
     Name = "${var.project_name}-${var.Environment_name}-eip-nat-${count.index +1}"
@@ -81,7 +82,7 @@ resource "aws_route_table" "private" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.main.id
+    gateway_id = aws_nat_gateway.main[count.index].id
   }
 
   tags = merge(var.tags, {

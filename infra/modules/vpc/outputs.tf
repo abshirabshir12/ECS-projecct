@@ -25,5 +25,5 @@ output "internet_gateway_id" {
 
 output "nat_gateway_ids" {
   description = "Nat gateway ids"
-  value = aws_nat_gateway.main.id
+  value = [for nat in aws_nat_gateway.main : nat.id]
 }

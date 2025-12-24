@@ -44,7 +44,7 @@ variable "allowed_ips" {
 
 variable "iam_name" {
    type = string
-   description = "ECS-threat-tool"
+   default = "ECS-threat-tool"
 }
 
 variable "instance_type" {
@@ -56,7 +56,7 @@ variable "instance_type" {
 variable "domain_name" {
   description = "domain name for application"
   type = string
-  default = "abshirabshir12.co.uk"
+  default = "lab.abshirabshir.co.uk"
 }
 
 variable "Environment_name" {
@@ -66,7 +66,7 @@ variable "Environment_name" {
 }
 variable "container_port" {
   type = number
-  default = 80
+  default = 3000
 }
 
 variable "container_cpu" {
@@ -81,6 +81,7 @@ variable "container_memory" {
 
 variable "hosted_zone_id" {
   type = string
+  default = "Z0420365QZU98VBUGSGV"
 }
 
 variable "desired_count" {
@@ -88,62 +89,39 @@ variable "desired_count" {
   default = 1
 }
 
-variable "public_subnet_ids" {
-  type = string
-}
-
 variable "github_repo" {
   type = string
+  default = "ECS-projecct"
 }
 
 variable "policy_arn" {
   type = string
-}
-
-variable "subdomain" {
-  type = string
+  default = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 variable "ttl" {
   type = number
+  default = 300
 }
  
-variable "validation_method" {
-  type = string
-}
-
-variable "health_check_path" {
-  type = string
-}
-
-variable "certificate_validation_ref" {
-  type = string
-}
 
 variable "target_port" {
-  type = string
+  type = number
+  default = 80
 }
 
-variable "container_image" {
-  type = string
+variable "image_tag" {
+  description = "Docker image tag to use for ECS task definition (defaults to 'latest')"
+  type        = string
+  default     = "latest"
 }
 
 variable "log_retention_days" {
-  type = string
+  type = number
+  default = 7
 }
 
-variable "target_group_arn" {
-  type = string
-}
-
-variable "subnet_ids" {
+variable "subject_alternative_names" {
   type = list(string)
-}
-
-variable "task_arn" {
-  type = string
-}
-
-variable "ecr_repo_url" {
-  type = string
+  default = []
 }

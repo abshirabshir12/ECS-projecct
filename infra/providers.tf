@@ -6,12 +6,7 @@ terraform {
     }
   }
 }
-terraform {
-  backend "s3" {
-   bucket      = "ecs-threat-tool-bucket"
-   key = "ecs-threat-tool/terraform.tfstate"
-  }
-}
+
 provider "aws" {
   region = var.aws_region
 }

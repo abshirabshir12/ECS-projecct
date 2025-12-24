@@ -2,7 +2,7 @@ output "cluster_name" {
   value = aws_ecs_cluster.ecs.name
 }
 
-output "task_defenition.app.arn" {
+output "task_definition_app_arn" {
   value = aws_ecs_task_definition.app.arn
 }
 

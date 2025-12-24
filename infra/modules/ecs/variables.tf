@@ -1,6 +1,3 @@
-variable "subnet_ids" {
-  type = list(string)
-}
 
 variable "alb_sg_ids" {
   type = string
@@ -15,20 +12,20 @@ variable "target_group_arn" {
 }
 
 variable "container_port" {
-  type = string
+  type = number
+  default = 3000
 }
 
 variable "container_memory" {
-  type = string
+  type = number
+  default = 512
 }
 
 variable "container_cpu" {
-  type = string
+  type = number
+  default = 256
 }
 
-variable "policy_arn" {
-  type = string
-}
 
 variable "project_name" {
   type = string
@@ -43,7 +40,8 @@ variable "vpc_id" {
 }
 
 variable "desired_count" {
-  type = string
+  type = number
+  default = 1
 }
 
 variable "execution_arn" {
@@ -61,8 +59,14 @@ variable "image_tag" {
 
 variable "log_retention_days" {
   type = number
+  default = 7
 }
 
 variable "ecr_repo_url" {
   type = string
+}
+
+variable "private_subnet_ids" {
+  description = "Private subnet IDs"
+  type        = list(string)
 }
