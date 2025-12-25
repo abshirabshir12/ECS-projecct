@@ -2,18 +2,20 @@ name: build docker image
 
 on: 
     workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
 
 env:
-  AWS_Region: eu-west-2
   ECR_Repository: Frontend
   Image_Tag: latest 
   ECS_CLUSTER: ecs
   ECS_SERVICE: app
-  aws-region: eu-west-2
 
 jobs:
   build-and-deploy: 
     runs-on: ubuntu-latest
+    
 
     steps: 
     - name: Checkout Code 
