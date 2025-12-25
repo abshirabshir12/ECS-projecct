@@ -9,6 +9,7 @@ env:
   Image_Tag: latest 
   ECS_CLUSTER: ecs
   ECS_SERVICE: app
+  aws-region: eu-west-2
 
 jobs:
   build-and-deploy: 
