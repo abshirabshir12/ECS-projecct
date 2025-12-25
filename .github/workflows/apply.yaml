@@ -18,13 +18,13 @@ jobs:
         - name: set up Terraform
           uses: hashicorp/setup-terraform@v3 
           with: 
-            terraform_version: ${{ env.TF_Version}}
+            terraform_version: eu-west-2
 
         - name: configure AWS credentials
           uses: aws-actions/configure-aws-credentials@v3
           with:
             role-to-assume: arn:aws:iam::555569221122:role/ECS-projecct-github-actions-role
-            aws-region: ${{ env.AWS_Region }}
+            aws-region: eu-west-2
 
         - name: Terraform init 
           run: terraform init
