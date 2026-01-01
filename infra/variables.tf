@@ -30,10 +30,6 @@ variable "azs" {
   default = [ "eu-west-2a", "eu-west-2b" ]
 }
 
-variable "alb_logs_bucket" {
-  type = string
-}
-
 
 
 variable "domain_name" {
