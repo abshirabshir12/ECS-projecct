@@ -8,7 +8,7 @@ permissions:
 
 env:
   ECR_REPOSITORY: ECS-projecct-repo
-  Image_TAG: latest 
+  IMAGE_TAG: latest 
   ECS_CLUSTER: ecs
   ECS_SERVICE: app 
 
