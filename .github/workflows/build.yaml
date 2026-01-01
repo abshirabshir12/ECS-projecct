@@ -9,7 +9,7 @@ permissions:
 env:
   ECR_REPOSITORY: ecs-projecct-repo
   IMAGE_TAG: latest 
-  ECS_CLUSTER: ecs
+  ECS_CLUSTER: ECS-projecct-ecs-cluster
   ECS_SERVICE: app 
 
 jobs:
