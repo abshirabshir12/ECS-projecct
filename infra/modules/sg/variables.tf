@@ -21,7 +21,7 @@ variable "vpc_cidr" {
 variable "cidr_ipv4" {
   default = "0.0.0.0/0"
   description = "Cidr block for ipv4"
-  type = number
+  type = string
 }
 
 variable "http_port" {
