@@ -1,5 +1,6 @@
 variable "project_name" {
   default = "ECS-projecct"
+  type = string
 }
 
 variable "aws_region" {
@@ -7,10 +8,6 @@ variable "aws_region" {
   default = "eu-west-2"
 }
 
- variable "vpc_name" {
-   type = string
-   default = "ECS" 
- }
 
  variable "vpc_cidr" {
    type = string
@@ -37,21 +34,9 @@ variable "azs" {
   default = [ "eu-west-2a", "eu-west-2b" ]
 }
 
-variable "allowed_ips" {
-  type = list(string)
-  default = [ "0.0.0.0/0" ]  
-}
 
-variable "iam_name" {
-   type = string
-   default = "ECS-threat-tool"
-}
 
-variable "instance_type" {
-  description = "EC2 instance type"
-  type = string
-  default = "t3.micro"
-}
+
 
 variable "domain_name" {
   description = "domain name for application"
@@ -105,23 +90,13 @@ variable "ttl" {
 }
  
 
-variable "target_port" {
-  type = number
-  default = 80
-}
 
-variable "image_tag" {
-  description = "Docker image tag to use for ECS task definition (defaults to 'latest')"
-  type        = string
-  default     = "latest"
-}
+
+
 
 variable "log_retention_days" {
   type = number
   default = 7
 }
 
-variable "subject_alternative_names" {
-  type = list(string)
-  default = []
-}
+
