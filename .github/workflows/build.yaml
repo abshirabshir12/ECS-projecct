@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 env:
-  ECR_REPOSITORY: ECS-projecct-repo
+  ECR_REPOSITORY: ecs-projecct-repo
   IMAGE_TAG: latest 
   ECS_CLUSTER: ecs
   ECS_SERVICE: app 
