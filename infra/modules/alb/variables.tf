@@ -21,3 +21,7 @@ variable "alb_sg_id" {
 variable "alb_logs_bucket" {
   type = string
 }
+
+variable "waf_arn" {
+  type = string
+}
