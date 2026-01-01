@@ -3,6 +3,10 @@ name: Terraform Apply
 on: 
     workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 env: 
     AWS_Region: eu-west-2
     TF_Version: 1.14.0
