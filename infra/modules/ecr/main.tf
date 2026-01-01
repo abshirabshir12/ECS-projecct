@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "this" {
-  name                 = "ecs-project-repo"
+  name                 = "ecs-projecct-repo"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 
