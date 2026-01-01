@@ -70,3 +70,6 @@ variable "private_subnet_ids" {
   description = "Private subnet IDs"
   type        = list(string)
 }
+variable "kms_key_arn" {
+  type = string
+}

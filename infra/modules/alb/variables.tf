@@ -18,3 +18,6 @@ variable "alb_sg_id" {
   type        = string
 }
 
+variable "alb_logs_bucket" {
+  type = string
+}

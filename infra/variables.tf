@@ -30,7 +30,9 @@ variable "azs" {
   default = [ "eu-west-2a", "eu-west-2b" ]
 }
 
-
+variable "alb_logs_bucket" {
+  type = string
+}
 
 
 
@@ -84,15 +86,8 @@ variable "ttl" {
   type = number
   default = 300
 }
- 
-
-
-
-
 
 variable "log_retention_days" {
   type = number
   default = 7
 }
-
-

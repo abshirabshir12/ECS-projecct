@@ -67,7 +67,7 @@ resource "aws_iam_role_policy" "ecs_task_logs" {
         "logs:PutLogEvents"
         ]
         Effect   = "Allow"
-        Resource = "*"
+        Resource = "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:${var.project_name}-ecs-logs:*"
       },
     ]
   })

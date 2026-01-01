@@ -6,6 +6,13 @@ resource "aws_lb" "this" {
   subnets            = var.public_subnet_ids
 
   enable_deletion_protection = true
+    enable_http2               = true
+  drop_invalid_header_fields = true  # CKV_AWS_131
+  access_logs {
+    bucket  = var.alb_logs_bucket
+    prefix  = "${var.project_name}/alb"
+    enabled = true                # CKV_AWS_91
+  }
 
   tags = {
     name = "${var.project_name}-alb-lb"

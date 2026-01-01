@@ -3,7 +3,7 @@ resource "aws_security_group" "ecs_sg" {
   vpc_id      = var.vpc_id
 
  ingress {
-    description = "http from alb"
+    description = "Allow HTTP from ALB"
     from_port = var.container_port
     to_port = var.container_port
     protocol = "tcp"
@@ -11,10 +11,11 @@ resource "aws_security_group" "ecs_sg" {
 }
 
   egress {
+    description = "Allow all outbound to internal network"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    cidr_blocks      = ["10.0.0.0/16"]
   }
 
  tags = {
@@ -83,8 +84,8 @@ resource "aws_ecs_service" "app" {
     container_port   = var.container_port
   }
 }
-
 resource "aws_cloudwatch_log_group" "ecs_logs" {
-  name = "${var.project_name}-ecs-logs"
-  retention_in_days = var.log_retention_days
+  name              = "${var.project_name}-ecs-logs"
+  retention_in_days = 365
+  kms_key_id        = var.kms_key_arn 
 }
