@@ -32,7 +32,7 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform
+        working-directory: ./infra
 
       - name: Terraform Format Checks
         run: terraform fmt -check
@@ -40,14 +40,14 @@ jobs:
       - name: TFLint
         uses: terraform-linters/setup-tflint@v4
       - run: tflint
-        working-directory: ./terraform
+        working-directory: ./infra
 
       - name: Run Checkov Security scan
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: ./terraform
+          directory: ./infra
           quiet: true
 
       - name: Terraform plan
         run: terraform plan
-        working-directory: ./terraform
+        working-directory: ./infra
