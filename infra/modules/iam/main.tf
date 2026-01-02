@@ -131,52 +131,44 @@ resource "aws_iam_role_policy" "github_actions" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+
+      # --- ECS: deploy new task definition ---
       {
         Effect = "Allow"
         Action = [
-          "ec2:*",
-          "ecs:*",
-          "ecr:*",
-          "iam:CreateRole",
-          "iam:DeleteRole",
-          "iam:GetRole",
-          "iam:ListRolePolicies",
-          "iam:GetRolePolicy",
-          "iam:AttachRolePolicy",
-          "iam:DetachRolePolicy",
-          "iam:PutRolePolicy",
-          "iam:DeleteRolePolicy",
-          "iam:ListAttachedRolePolicies",
-          "iam:ListInstanceProfilesForRole",
-          "iam:RemoveRoleFromInstanceProfile",
-          "iam:ListInstanceProfiles",
-          "iam:CreateOpenIDConnectProvider",
-          "iam:DeleteOpenIDConnectProvider",
-          "iam:GetOpenIDConnectProvider",
-          "iam:TagOpenIDConnectProvider",
-          "iam:TagRole",
-          "iam:UntagRole",
-          "iam:PassRole",
-          "logs:*",
-          "acm:DescribeCertificate",
-          "route53:ChangeResourceRecordSets",
-          "route53:GetChange",
-          "route53:GetHostedZone",
-          "route53:ListHostedZones",
-          "route53:ListHostedZonesByName",
-          "route53:ListResourceRecordSets",
-          "elasticloadbalancing:*",
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:ListBucket",
-          "s3:HeadBucket",
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem",
-          "dynamodb:DescribeTable",
-          "dynamodb:UpdateItem"
+          "ecs:UpdateService",
+          "ecs:DescribeServices",
+          "ecs:DescribeTaskDefinition",
+          "ecs:RegisterTaskDefinition"
         ]
         Resource = "*"
+      },
+
+      {
+        Effect = "Allow"
+        Action = "ecr:GetAuthorizationToken"
+        Resource = "*"
+      },
+
+      # --- ECR: push images (scoped) ---
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage",
+          "ecr:BatchGetImage"
+        ]
+        Resource = "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/${var.project_name}*"
+      },
+
+      # --- Pass ONLY the ECS task execution role ---
+      {
+        Effect = "Allow"
+        Action = "iam:PassRole"
+        Resource = "arn:aws:iam::${var.account_id}:role/${var.project_name}-ecs-task-execution-role"
       }
     ]
   })

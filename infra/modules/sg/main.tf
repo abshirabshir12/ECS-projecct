@@ -1,5 +1,6 @@
 resource "aws_security_group" "alb" {
   name        = "ecs_alb"
+  description = "Security group for public ALB"
   vpc_id      = var.vpc_id
 
   tags = {
@@ -27,6 +28,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_http_443" {
 
 resource "aws_vpc_security_group_egress_rule" "alb_egress_all" {
   security_group_id = aws_security_group.alb.id
+  description       = "Allow outbound traffic to VPC"
   cidr_ipv4         = "10.0.0.0/16"
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
@@ -54,4 +56,9 @@ resource "aws_vpc_security_group_egress_rule" "svc_egress_all" {
   security_group_id = aws_security_group.svc.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" 
+}
+
+resource "aws_wafv2_web_acl_association" "alb" {
+  resource_arn = aws_lb.this.arn
+  web_acl_arn  = aws_wafv2_web_acl.this.arn
 }

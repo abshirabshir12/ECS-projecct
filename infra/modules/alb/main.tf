@@ -2,7 +2,7 @@ resource "aws_lb" "this" {
   name               = var.project_name
   internal           = false
   load_balancer_type = "application"
-   security_groups = [var.alb_sg_id]
+  security_groups    = var.alb_sg_ids
   subnets            = var.public_subnet_ids
 
   enable_deletion_protection = true

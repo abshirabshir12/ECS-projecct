@@ -13,9 +13,9 @@ variable "public_subnet_ids" {
 variable "certificate_arn" {
   type = string
 }
-variable "alb_sg_id" {
+variable "alb_sg_ids" {
   description = "Security group ID for the ALB"
-  type        = string
+  type        = list(string)
 }
 
 variable "alb_logs_bucket" {
