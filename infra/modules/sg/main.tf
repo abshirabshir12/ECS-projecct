@@ -54,6 +54,7 @@ resource "aws_vpc_security_group_ingress_rule" "svc_alb_3000" {
 
 resource "aws_vpc_security_group_egress_rule" "svc_egress_all" {
   security_group_id = aws_security_group.svc.id
+  description       = "Allow outbound internet access from ECS service"
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" 
 }

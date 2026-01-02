@@ -1,5 +1,6 @@
 resource "aws_security_group" "ecs_sg" {
   name        = "${var.project_name}-ecs-sg"
+  description = "Security group for ECS service tasks"
   vpc_id      = var.vpc_id
 
  ingress {
