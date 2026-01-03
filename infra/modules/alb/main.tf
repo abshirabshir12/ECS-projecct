@@ -1,3 +1,4 @@
+# checkov:skip=CKV2_AWS_76: WAFv2 WebACL with AWSManagedRules is associated via aws_wafv2_web_acl_association
 resource "aws_lb" "this" {
   name               = var.project_name
   internal           = false
