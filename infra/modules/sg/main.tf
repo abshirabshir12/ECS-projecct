@@ -34,6 +34,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_all" {
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
+# checkov:skip=CKV2_AWS_5: Security group attached to ECS service
 resource "aws_security_group" "svc" {
   name = "svc"
   vpc_id = var.vpc_id

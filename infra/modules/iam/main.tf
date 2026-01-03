@@ -124,6 +124,8 @@ resource "aws_iam_role" "github_actions" {
   }
 }
 
+# checkov:skip=CKV_AWS_355: ECS RegisterTaskDefinition does not support resource-level permissions
+# checkov:skip=CKV_AWS_290: Write permissions are scoped to required ECS and ECR resources
 resource "aws_iam_role_policy" "github_actions" {
   name = "${var.project_name}-github-actions-policy"
   role = aws_iam_role.github_actions.id
