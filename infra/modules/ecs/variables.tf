@@ -73,3 +73,7 @@ variable "private_subnet_ids" {
 variable "kms_key_arn" {
   type = string
 }
+
+variable "ecs_sg_id" {
+  type = string
+}

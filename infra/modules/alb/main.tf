@@ -68,7 +68,7 @@ resource "aws_lb_listener" "HTTPS" {
   }
 }
 
-resource "aws_wafv2_web_acl_association" "alb_waf" {
+resource "aws_wafv2_web_acl_association" "alb" {
   resource_arn = aws_lb.this.arn
-  web_acl_arn  = var.waf_arn
+  web_acl_arn  = aws_wafv2_web_acl.alb.arn
 }

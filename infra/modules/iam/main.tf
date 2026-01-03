@@ -131,18 +131,26 @@ resource "aws_iam_role_policy" "github_actions" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
+# --- ECS read-only (allowed to use *) ---
+{
+  Effect = "Allow"
+  Action = [
+    "ecs:DescribeServices",
+    "ecs:DescribeTaskDefinition"
+  ]
+  Resource = "*"
+},
 
-      # --- ECS: deploy new task definition ---
-      {
-        Effect = "Allow"
-        Action = [
-          "ecs:UpdateService",
-          "ecs:DescribeServices",
-          "ecs:DescribeTaskDefinition",
-          "ecs:RegisterTaskDefinition"
-        ]
-        Resource = "*"
-      },
+# --- ECS write (MUST be scoped) ---
+{
+  Effect = "Allow"
+  Action = [
+    "ecs:UpdateService",
+    "ecs:RegisterTaskDefinition"
+  ]
+  Resource = "arn:aws:ecs:${var.aws_region}:${var.account_id}:service/${var.cluster_name}/*"
+},
+
 
       {
         Effect = "Allow"

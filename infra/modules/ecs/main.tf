@@ -75,7 +75,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     subnets = var.private_subnet_ids
-    security_groups = [ aws_security_group.ecs_sg.id ]
+    security_groups = [var.ecs_sg_id]
     assign_public_ip = false 
   }
 
@@ -90,3 +90,4 @@ resource "aws_cloudwatch_log_group" "ecs_logs" {
   retention_in_days = 365
   kms_key_id        = var.kms_key_arn 
 }
+

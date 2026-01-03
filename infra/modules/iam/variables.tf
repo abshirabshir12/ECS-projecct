@@ -20,3 +20,7 @@ variable "account_id" {
   type = string
   default = "555569221122"
 }
+
+variable "cluster_name" {
+  type = string
+}
