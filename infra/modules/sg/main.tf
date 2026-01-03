@@ -1,3 +1,4 @@
+# checkov:skip=CKV2_AWS_5: SG attached to ALB in alb module
 resource "aws_security_group" "alb" {
   name        = "ecs_alb"
   description = "Security group for public ALB"

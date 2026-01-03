@@ -1,3 +1,4 @@
+# checkov:skip=CKV2_AWS_5: ECS service attaches this SG via network_configuration
 resource "aws_security_group" "ecs_sg" {
   name        = "${var.project_name}-ecs-sg"
   description = "Security group for ECS service tasks"

@@ -59,7 +59,7 @@ resource "aws_lb_listener" "HTTPS" {
   load_balancer_arn = aws_lb.this.arn
   port              = "443"
   protocol          = "HTTPS"
-  ssl_policy = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn   = var.certificate_arn
 
   default_action {
@@ -68,7 +68,3 @@ resource "aws_lb_listener" "HTTPS" {
   }
 }
 
-resource "aws_wafv2_web_acl_association" "alb" {
-  resource_arn = aws_lb.this.arn
-  web_acl_arn  = aws_wafv2_web_acl.alb.arn
-}
