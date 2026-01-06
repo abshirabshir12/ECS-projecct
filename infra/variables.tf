@@ -87,3 +87,20 @@ variable "log_retention_days" {
   type = number
   default = 7
 }
+
+variable "cluster_name" {
+  type = string
+  default = "ECS-projecct-ecs-cluster"
+}
+
+variable "waf_arn" {
+  type = string
+}
+
+variable "kms_key_arn" {
+  type = string
+}
+
+variable "alb_logs_bucket" {
+  type = string
+}

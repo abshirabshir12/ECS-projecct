@@ -124,7 +124,6 @@ resource "aws_iam_role" "github_actions" {
   }
 }
 
-# checkov:skip=CKV_AWS_355: GitHub Actions requires wildcard permissions for ECS/ECR/IAM orchestration
 resource "aws_iam_role_policy" "github_actions" {
   name = "${var.project_name}-github-actions-policy"
   role = aws_iam_role.github_actions.id
@@ -132,52 +131,37 @@ resource "aws_iam_role_policy" "github_actions" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
-# --- ECS read-only (allowed to use *) ---
-{
-  Effect = "Allow"
-  Action = [
-    "ecs:DescribeServices",
-    "ecs:DescribeTaskDefinition"
-  ]
-  Resource = "*"
-},
 
-# --- ECS write (MUST be scoped) ---
-{
-  Effect = "Allow"
-  Action = [
-    "ecs:UpdateService",
-    "ecs:RegisterTaskDefinition"
-  ]
-  Resource = "arn:aws:ecs:${var.aws_region}:${var.account_id}:service/${var.cluster_name}/*"
-},
-
-
-      {
-        Effect = "Allow"
-        Action = "ecr:GetAuthorizationToken"
-        Resource = "*"
-      },
-
-      # --- ECR: push images (scoped) ---
+      # ECS – scoped
       {
         Effect = "Allow"
         Action = [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
-          "ecr:CompleteLayerUpload",
-          "ecr:PutImage",
-          "ecr:BatchGetImage"
+          "ecs:UpdateService",
+          "ecs:DescribeServices",
+          "ecs:DescribeTaskDefinition"
         ]
-        Resource = "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/${var.project_name}*"
+        Resource = "arn:aws:ecs:${var.aws_region}:${var.account_id}:service/${var.cluster_name}/*"
       },
 
-      # --- Pass ONLY the ECS task execution role ---
+      # ECR – must be *
       {
         Effect = "Allow"
-        Action = "iam:PassRole"
-        Resource = "arn:aws:iam::${var.account_id}:role/${var.project_name}-ecs-task-execution-role"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchGetImage",
+          "ecr:PutImage"
+        ]
+        Resource = "*"
+      },
+
+      # Logs – scoped
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:/ecs/*"
       }
     ]
   })

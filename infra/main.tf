@@ -32,6 +32,7 @@ module "iam" {
   project_name = var.project_name
   github_repo = var.github_repo
   policy_arn = var.policy_arn
+  cluster_name = var.cluster_name
 
 }
 
@@ -49,8 +50,9 @@ module "alb" {
   vpc_id = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnet_ids
   certificate_arn = module.acm.certificate_arn
-  alb_sg_id = module.sg.alb_sg_id
-  
+  alb_sg_ids = module.sg.alb_sg_ids
+  waf_arn = var.waf_arn
+  alb_logs_bucket = var.alb_logs_bucket
 }
 
 module "route53" {
@@ -79,10 +81,13 @@ target_group_arn = module.alb.target_group_arn
 task_arn = module.iam.ecs_task_role_arn
 ecr_repo_url = module.ecr.repository_url
 private_subnet_ids = module.vpc.private_subnet_ids
+ecs_sg_id = module.sg.ecs_sg_id
+kms_key_arn = var.kms_key_arn
 
 }
 
 module "ecr" {
   source = "./modules/ecr"
   project_name = var.project_name
+  kms_key_arn = var.kms_key_arn
 }
