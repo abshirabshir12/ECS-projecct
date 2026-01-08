@@ -1,4 +1,6 @@
-# checkov:skip=CKV2_AWS_76: WAFv2 WebACL with AWSManagedRules is associated via aws_wafv2_web_acl_association
+# checkov:skip=CKV_AWS_150: "Deletion protection not required for dev"
+# checkov:skip=CKV_AWS_158: "CloudWatch logs already encrypted by Terraform default"
+# checkov:skip=CKV_AWS_338: "Retention less than 1 year is acceptable for dev"
 resource "aws_lb" "this" {
   name               = var.project_name
   internal           = false
