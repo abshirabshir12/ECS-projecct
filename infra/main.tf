@@ -5,7 +5,6 @@ terraform {
     bucket         = "ecs-terra-bucket"
     key            = "infrastructure/terraform.tfstate"
     region         = "eu-west-2"
-    profile        = "default"
     use_lockfile = true
     encrypt        = true
   }
