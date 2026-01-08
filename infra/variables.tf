@@ -93,14 +93,3 @@ variable "cluster_name" {
   default = "ECS-projecct-ecs-cluster"
 }
 
-variable "waf_arn" {
-  type = string
-}
-
-variable "kms_key_arn" {
-  type = string
-}
-
-variable "alb_logs_bucket" {
-  type = string
-}

@@ -1,4 +1,4 @@
-# checkov:skip=CKV2_AWS_5: ECS service attaches this SG via network_configuration
+ #checkov:skip=CKV2_AWS_5: ECS service attaches this SG via network_configuration
 resource "aws_security_group" "ecs_sg" {
   name        = "${var.project_name}-ecs-sg"
   description = "Security group for ECS service tasks"
@@ -76,7 +76,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     subnets = var.private_subnet_ids
-    security_groups = [var.ecs_sg_id]
+    security_groups = [aws_security_group.ecs_sg.id]
     assign_public_ip = false 
   }
 
@@ -86,9 +86,48 @@ resource "aws_ecs_service" "app" {
     container_port   = var.container_port
   }
 }
+
+
 resource "aws_cloudwatch_log_group" "ecs_logs" {
-  name              = "${var.project_name}-ecs-logs"
-  retention_in_days = 365
-  kms_key_id        = var.kms_key_arn 
+  name              = "ECS-projecct-ecs-logs"
+  retention_in_days = 30
+  kms_key_id        = aws_kms_key.ecs_logs.arn
+}
+
+
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_kms_key" "ecs_logs" {
+  description = "KMS key for ECS logs"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid: "RootAccess"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid: "CloudWatchLogs"
+        Effect = "Allow"
+        Principal = {
+          Service = "logs.${var.aws_region}.amazonaws.com"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:GenerateDataKey*",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }
 

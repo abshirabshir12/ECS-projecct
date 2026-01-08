@@ -6,7 +6,7 @@ resource "aws_lb" "this" {
   security_groups    = var.alb_sg_ids
   subnets            = var.public_subnet_ids
 
-  enable_deletion_protection = true
+  enable_deletion_protection = false
     enable_http2               = true
   drop_invalid_header_fields = true  # CKV_AWS_131
   access_logs {
@@ -67,5 +67,27 @@ resource "aws_lb_listener" "HTTPS" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.this.arn
   }
+}
+
+data "aws_elb_service_account" "this" {}
+
+resource "aws_s3_bucket_policy" "alb_logs" {
+  bucket = aws_s3_bucket.alb_logs.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          AWS = data.aws_elb_service_account.this.arn
+        }
+        Action = [
+          "s3:PutObject"
+        ]
+        Resource = "arn:aws:s3:::ecs-projecct-alb-logs/*"
+      }
+    ]
+  })
 }
 

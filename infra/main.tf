@@ -5,6 +5,7 @@ terraform {
     bucket         = "ecs-terra-bucket"
     key            = "infrastructure/terraform.tfstate"
     region         = "eu-west-2"
+    profile        = "default"
     dynamodb_table = "terraform-state-lock"
     encrypt        = true
   }
@@ -50,9 +51,9 @@ module "alb" {
   vpc_id = module.vpc.vpc_id
   public_subnet_ids = module.vpc.public_subnet_ids
   certificate_arn = module.acm.certificate_arn
-  alb_sg_ids = module.sg.alb_sg_ids
-  waf_arn = var.waf_arn
-  alb_logs_bucket = var.alb_logs_bucket
+  alb_sg_ids = [module.sg.alb_sg_id]
+  waf_arn = module.alb.waf_arn
+  alb_logs_bucket = module.alb.alb_logs_bucket
 }
 
 module "route53" {
@@ -81,13 +82,13 @@ target_group_arn = module.alb.target_group_arn
 task_arn = module.iam.ecs_task_role_arn
 ecr_repo_url = module.ecr.repository_url
 private_subnet_ids = module.vpc.private_subnet_ids
-ecs_sg_id = module.sg.ecs_sg_id
-kms_key_arn = var.kms_key_arn
+ecs_sg_id = module.ecs.ecs_sg_id
+kms_key_arn = module.alb.kms_key_arn
 
 }
 
 module "ecr" {
   source = "./modules/ecr"
   project_name = var.project_name
-  kms_key_arn = var.kms_key_arn
+  kms_key_arn = module.alb.kms_key_arn
 }

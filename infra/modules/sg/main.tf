@@ -1,4 +1,4 @@
-# checkov:skip=CKV2_AWS_5: SG attached to ALB in alb module
+ #checkov:skip=CKV2_AWS_5: Security group attached in ALB module
 resource "aws_security_group" "alb" {
   name        = "ecs_alb"
   description = "Security group for public ALB"
@@ -34,34 +34,5 @@ resource "aws_vpc_security_group_egress_rule" "alb_egress_all" {
   ip_protocol       = "-1" # semantically equivalent to all ports
 }
 
-# checkov:skip=CKV2_AWS_5: Security group attached to ECS service
-resource "aws_security_group" "svc" {
-  name = "svc"
-  vpc_id = var.vpc_id
-  description = "sg to ecs"
 
-  tags = {
-    Name  = "ecs_sg"
-  }
-}
 
-resource "aws_vpc_security_group_ingress_rule" "svc_alb_3000" {
-  description = "allow alb tasks on app"
-  security_group_id = aws_security_group.svc.id
-  referenced_security_group_id = aws_security_group.alb.id
-  from_port         = 3000
-  ip_protocol       = "tcp"
-  to_port           = 3000
-}
-
-resource "aws_vpc_security_group_egress_rule" "svc_egress_all" {
-  security_group_id = aws_security_group.svc.id
-  description       = "Allow outbound internet access from ECS service"
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1" 
-}
-
-resource "aws_wafv2_web_acl_association" "alb" {
-  resource_arn = aws_lb.this.arn
-  web_acl_arn  = aws_wafv2_web_acl.this.arn
-}

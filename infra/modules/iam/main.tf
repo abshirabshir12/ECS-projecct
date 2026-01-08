@@ -123,7 +123,7 @@ resource "aws_iam_role" "github_actions" {
     prevent_destroy = false
   }
 }
-
+# checkov:skip=CKV2_AWS_290: ECR wildcard required for CI/CD
 resource "aws_iam_role_policy" "github_actions" {
   name = "${var.project_name}-github-actions-policy"
   role = aws_iam_role.github_actions.id
@@ -143,16 +143,25 @@ resource "aws_iam_role_policy" "github_actions" {
         Resource = "arn:aws:ecs:${var.aws_region}:${var.account_id}:service/${var.cluster_name}/*"
       },
 
-      # ECR – must be *
-      {
-        Effect = "Allow"
-        Action = [
-          "ecr:GetAuthorizationToken",
-          "ecr:BatchGetImage",
-          "ecr:PutImage"
-        ]
-        Resource = "*"
-      },
+      # ECR auth (must be *)
+{
+  Effect = "Allow"
+  Action = [
+    "ecr:GetAuthorizationToken"
+  ]
+  Resource = "*"
+},
+
+# ECR repo-specific access
+{
+  Effect = "Allow"
+  Action = [
+    "ecr:BatchGetImage",
+    "ecr:PutImage"
+  ]
+  Resource = "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/*"
+},
+
 
       # Logs – scoped
       {

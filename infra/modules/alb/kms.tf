@@ -38,3 +38,12 @@ resource "aws_kms_alias" "waf" {
   name          = "alias/waf-logs"
   target_key_id = aws_kms_key.waf.id
 }
+
+resource "aws_s3_bucket" "alb_logs" {
+  bucket = lower("${var.project_name}-alb-logs")
+  force_destroy = true
+}
+
+resource "aws_kms_key" "alb_logs" {
+  description = "KMS key for ALB logs"
+}
