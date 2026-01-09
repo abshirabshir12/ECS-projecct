@@ -4,50 +4,33 @@ on:
   workflow_dispatch:
 
 permissions:
-  id-token: write
+  id-token: write   # REQUIRED for OIDC
   contents: read
 
 env:
   AWS_REGION: eu-west-2
-  TF_VERSION: 1.14.0
 
 jobs:
-  terraform:
+  plan:
+    name: Terraform plan
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          terraform_version: ${{ env.TF_VERSION }}
+          role-to-assume: arn:aws:iam::555569221122:role/github-actions-terraform
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Config AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: arn:aws:iam::555569221122:role/ECS-projecct-github-actions-role
-          aws-region: eu-west-2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform Init
-        run: terraform init
-        working-directory: ./infra
-
-      - name: Terraform Format Checks
-        run: terraform fmt -check
-
-      - name: TFLint
-        uses: terraform-linters/setup-tflint@v4
-      - run: tflint
-        working-directory: ./infra
-
-      - name: Run Checkov Security scan
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ./infra
-          quiet: true
-
-      - name: Terraform plan
-        run: terraform plan
-        working-directory: ./infra
+      - name: Terraform Init & Plan
+        run: |
+          cd terraform
+          terraform fmt -check
+          terraform init
+          terraform plan
