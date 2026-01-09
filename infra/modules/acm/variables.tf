@@ -1,5 +1,5 @@
 variable "zone_id" {
-  type = string
+  type    = string
   default = "Z0420365QZU98VBUGSGV"
 }
 
@@ -9,7 +9,7 @@ variable "domain_name" {
 
 
 variable "ttl" {
-  type = number
+  type    = number
   default = 300
 }
 
@@ -17,6 +17,6 @@ variable "project_name" {
   type = string
 }
 variable "subject_alternative_names" {
-  type = list(string)
+  type    = list(string)
   default = []
 }

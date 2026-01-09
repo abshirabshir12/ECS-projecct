@@ -18,7 +18,7 @@ resource "aws_iam_role" "ecs_execution" {
   })
 
   tags = {
-   name = "${var.project_name}-ecs-execution" 
+    name = "${var.project_name}-ecs-execution"
   }
 }
 
@@ -47,7 +47,7 @@ resource "aws_iam_role" "ecs_task" {
   })
 
   tags = {
-   name = "${var.project_name}-ecs-task" 
+    name = "${var.project_name}-ecs-task"
   }
 }
 
@@ -62,9 +62,9 @@ resource "aws_iam_role_policy" "ecs_task_logs" {
     Statement = [
       {
         Action = [
-           "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
         ]
         Effect   = "Allow"
         Resource = "arn:aws:logs:${var.aws_region}:${var.account_id}:log-group:${var.project_name}-ecs-logs:*"
@@ -84,11 +84,11 @@ resource "aws_iam_openid_connect_provider" "github" {
 
   lifecycle {
     prevent_destroy = false
-}
+  }
 
-tags = {
-  name = "${var.project_name}github-oidc"
-}
+  tags = {
+    name = "${var.project_name}github-oidc"
+  }
 }
 
 resource "aws_iam_role" "github_actions" {
@@ -144,23 +144,23 @@ resource "aws_iam_role_policy" "github_actions" {
       },
 
       # ECR auth (must be *)
-{
-  Effect = "Allow"
-  Action = [
-    "ecr:GetAuthorizationToken"
-  ]
-  Resource = "*"
-},
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken"
+        ]
+        Resource = "*"
+      },
 
-# ECR repo-specific access
-{
-  Effect = "Allow"
-  Action = [
-    "ecr:BatchGetImage",
-    "ecr:PutImage"
-  ]
-  Resource = "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/*"
-},
+      # ECR repo-specific access
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:BatchGetImage",
+          "ecr:PutImage"
+        ]
+        Resource = "arn:aws:ecr:${var.aws_region}:${var.account_id}:repository/*"
+      },
 
 
       # Logs – scoped

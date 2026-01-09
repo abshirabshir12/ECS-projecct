@@ -9,12 +9,12 @@ resource "aws_lb" "this" {
   subnets            = var.public_subnet_ids
 
   enable_deletion_protection = false
-    enable_http2               = true
-  drop_invalid_header_fields = true  # CKV_AWS_131
+  enable_http2               = true
+  drop_invalid_header_fields = true # CKV_AWS_131
   access_logs {
     bucket  = var.alb_logs_bucket
     prefix  = "${var.project_name}/alb"
-    enabled = true                # CKV_AWS_91
+    enabled = true # CKV_AWS_91
   }
 
   tags = {
@@ -30,12 +30,12 @@ resource "aws_lb_target_group" "this" {
   vpc_id      = var.vpc_id
 
   health_check {
-    path = "/status"
-    interval = 30
-    timeout = 5
-    healthy_threshold = 2
+    path                = "/status"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
     unhealthy_threshold = 2
-    matcher = "200"
+    matcher             = "200"
   }
   tags = {
     name = "${var.project_name}-alb-tg"

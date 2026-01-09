@@ -1,15 +1,15 @@
 resource "aws_acm_certificate" "certificate" {
-  domain_name       = var.domain_name
-  validation_method = "DNS"
+  domain_name               = var.domain_name
+  validation_method         = "DNS"
   subject_alternative_names = var.subject_alternative_names
-  
 
- lifecycle {
+
+  lifecycle {
     create_before_destroy = true
   }
-  
-  
-   tags = {
+
+
+  tags = {
     name = "${var.project_name}-cert"
   }
 }
@@ -17,10 +17,10 @@ resource "aws_acm_certificate" "certificate" {
 resource "aws_route53_record" "cert_validation" {
   for_each = {
     for dvo in aws_acm_certificate.certificate.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
+      name    = dvo.resource_record_name
       zone_id = var.zone_id
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
+      record  = dvo.resource_record_value
+      type    = dvo.resource_record_type
     }
   }
 

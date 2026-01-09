@@ -10,53 +10,53 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
-tags = merge(var.tags, {
+  tags = merge(var.tags, {
     Name = "${var.project_name}-${var.Environment_name}-igw"
   })
 }
 
 resource "aws_subnet" "public" {
-  count                   = length(var.azs) 
+  count                   = length(var.azs)
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.public_subnet_cidrs[count.index]
   availability_zone       = var.azs[count.index]
   map_public_ip_on_launch = false
 
 
-  tags = merge(var.tags,{
-    Name = "${var.project_name}-${var.Environment_name}-public-${count.index +1}"
+  tags = merge(var.tags, {
+    Name = "${var.project_name}-${var.Environment_name}-public-${count.index + 1}"
   })
 }
 
 resource "aws_subnet" "private" {
-  count      = length(var.azs)
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.private_subnet_cidrs[count.index]
+  count             = length(var.azs)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private_subnet_cidrs[count.index]
   availability_zone = var.azs[count.index]
 
   tags = merge(var.tags, {
-    Name = "${var.project_name}-${var.Environment_name}-private-${count.index +1}"
+    Name = "${var.project_name}-${var.Environment_name}-private-${count.index + 1}"
     type = "private"
   })
 }
 
 resource "aws_eip" "nat" {
-  domain   = "vpc"
-  depends_on = [ aws_internet_gateway.main ]
-  count = length(var.azs)
+  domain     = "vpc"
+  depends_on = [aws_internet_gateway.main]
+  count      = length(var.azs)
 
   tags = merge(var.tags, {
-    Name = "${var.project_name}-${var.Environment_name}-eip-nat-${count.index +1}"
+    Name = "${var.project_name}-${var.Environment_name}-eip-nat-${count.index + 1}"
   })
 }
 
 resource "aws_nat_gateway" "main" {
-  count = length(var.azs)
+  count         = length(var.azs)
   allocation_id = aws_eip.nat[count.index].id
-  subnet_id     = aws_subnet.public[count.index].id 
+  subnet_id     = aws_subnet.public[count.index].id
 
- tags = merge(var.tags, {
-    Name = "${var.project_name}-${var.Environment_name}-nat-${count.index +1}"
+  tags = merge(var.tags, {
+    Name = "${var.project_name}-${var.Environment_name}-nat-${count.index + 1}"
   })
 
   depends_on = [aws_internet_gateway.main]
@@ -77,7 +77,7 @@ resource "aws_route_table" "public" {
 
 resource "aws_route_table" "private" {
   count = length(var.azs)
-  
+
   vpc_id = aws_vpc.main.id
 
   route {
@@ -86,7 +86,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = merge(var.tags, {
-    Name = "${var.project_name}-${var.Environment_name}-private-rt-${count.index +1}"
+    Name = "${var.project_name}-${var.Environment_name}-private-rt-${count.index + 1}"
   })
 }
 
@@ -99,8 +99,8 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_route_table_association" "private" {
   count = length(var.azs)
-  
-  subnet_id = aws_subnet.private[count.index].id
+
+  subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
 }
 

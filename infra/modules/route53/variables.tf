@@ -9,12 +9,12 @@ variable "zone_id" {
 }
 
 variable "domain_name" {
-  type = string
+  type    = string
   default = "lab.abshirabshir.co.uk"
 }
 
 variable "hosted_zone_id" {
-  type        = string
+  type    = string
   default = "Z0420365QZU98VBUGSGV"
 }
 

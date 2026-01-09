@@ -3,21 +3,21 @@ variable "project_name" {
 }
 
 variable "github_repo" {
-  type = string
+  type    = string
   default = "ECS-projecct"
 }
 
 variable "policy_arn" {
-  type = string
+  type    = string
   default = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 variable "aws_region" {
-  type        = string
+  type    = string
   default = "eu-west-2"
 }
 
 variable "account_id" {
-  type = string
+  type    = string
   default = "555569221122"
 }
 

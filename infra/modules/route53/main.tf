@@ -3,9 +3,9 @@ data "aws_route53_zone" "primary" {
 }
 
 resource "aws_route53_record" "alb" {
-  zone_id = var.hosted_zone_id
-  name    = "${var.domain_name}"
-  type    = "A"
+  zone_id         = var.hosted_zone_id
+  name            = var.domain_name
+  type            = "A"
   allow_overwrite = true
 
   alias {

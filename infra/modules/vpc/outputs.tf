@@ -1,6 +1,6 @@
 output "vpc_id" {
   description = "vpc id"
-  value = aws_vpc.main.id
+  value       = aws_vpc.main.id
 }
 
 output "vpc_cidr_block" {
@@ -25,5 +25,5 @@ output "internet_gateway_id" {
 
 output "nat_gateway_ids" {
   description = "Nat gateway ids"
-  value = [for nat in aws_nat_gateway.main : nat.id]
+  value       = [for nat in aws_nat_gateway.main : nat.id]
 }

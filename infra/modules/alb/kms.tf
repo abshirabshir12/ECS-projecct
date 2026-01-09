@@ -40,7 +40,7 @@ resource "aws_kms_alias" "waf" {
 }
 
 resource "aws_s3_bucket" "alb_logs" {
-  bucket = lower("${var.project_name}-alb-logs")
+  bucket        = lower("${var.project_name}-alb-logs")
   force_destroy = true
 }
 

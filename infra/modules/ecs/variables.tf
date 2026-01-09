@@ -12,17 +12,17 @@ variable "target_group_arn" {
 }
 
 variable "container_port" {
-  type = number
+  type    = number
   default = 3000
 }
 
 variable "container_memory" {
-  type = number
+  type    = number
   default = 512
 }
 
 variable "container_cpu" {
-  type = number
+  type    = number
   default = 256
 }
 
@@ -40,7 +40,7 @@ variable "vpc_id" {
 }
 
 variable "desired_count" {
-  type = number
+  type    = number
   default = 1
 }
 
@@ -53,12 +53,12 @@ variable "task_arn" {
 }
 
 variable "image_tag" {
-  type = string
+  type    = string
   default = "latest"
 }
 
 variable "log_retention_days" {
-  type = number
+  type    = number
   default = 7
 }
 

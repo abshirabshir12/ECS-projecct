@@ -1,4 +1,4 @@
- #checkov:skip=CKV2_AWS_5: Security group attached in ALB module
+#checkov:skip=CKV2_AWS_5: Security group attached in ALB module
 resource "aws_security_group" "alb" {
   name        = "ecs_alb"
   description = "Security group for public ALB"
@@ -10,7 +10,7 @@ resource "aws_security_group" "alb" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "alb_http_80" {
-  description = "allow http for 80-443 redirect"
+  description       = "allow http for 80-443 redirect"
   security_group_id = aws_security_group.alb.id
   cidr_ipv4         = "10.0.0.0/16"
   from_port         = 80
@@ -19,7 +19,7 @@ resource "aws_vpc_security_group_ingress_rule" "alb_http_80" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "alb_http_443" {
-  description = "allows https to alb"
+  description       = "allows https to alb"
   security_group_id = aws_security_group.alb.id
   cidr_ipv6         = "::/0"
   from_port         = 443

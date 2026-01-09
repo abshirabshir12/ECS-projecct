@@ -7,9 +7,9 @@ resource "aws_ecr_repository" "this" {
     scan_on_push = true
   }
 
- 
+
   encryption_configuration {
-    encryption_type = "KMS"         # CKV_AWS_136
+    encryption_type = "KMS" # CKV_AWS_136
     kms_key         = var.kms_key_arn
   }
 
