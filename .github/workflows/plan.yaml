@@ -30,7 +30,7 @@ jobs:
 
       - name: Terraform Init & Plan
         run: |
-          cd terraform
+          cd infra
           terraform fmt -check
           terraform init
           terraform plan
